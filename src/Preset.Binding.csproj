@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../.modules/OpenTabletDriver/OpenTabletDriver.Plugin/OpenTabletDriver.Plugin.csproj" />
+    <ProjectReference Include="../.modules/OpenTabletDriver/OpenTabletDriver.Desktop/OpenTabletDriver.Desktop.csproj" />
+  </ItemGroup>
+
+</Project>
