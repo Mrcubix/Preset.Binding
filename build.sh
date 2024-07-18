@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-files=( Preset.Binding OpenTabletDriver.External.Common OTD.UX.Remote.Lib)
+files=( Preset.Binding OpenTabletDriver.External.Common OTD.UX.Remote.Lib )
 
 dotnet publish -c Release -o temp
 
