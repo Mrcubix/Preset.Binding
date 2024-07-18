@@ -5,9 +5,13 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <DebugType>embedded</DebugType>
+  </PropertyGroup>
+
   <ItemGroup>
-    <ProjectReference Include="../.modules/OpenTabletDriver/OpenTabletDriver.Plugin/OpenTabletDriver.Plugin.csproj" />
     <ProjectReference Include="../.modules/OpenTabletDriver/OpenTabletDriver.Desktop/OpenTabletDriver.Desktop.csproj" />
+    <ProjectReference Include="../.modules/OTD.UX.Remote/OTD.UX.Remote.Lib/OTD.UX.Remote.Lib.csproj" />
   </ItemGroup>
 
 </Project>

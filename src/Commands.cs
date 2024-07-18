@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using OpenTabletDriver.Plugin;
 using OpenTabletDriver.Desktop;
 using OTD.PresetBinds.IPC;
+using System;
 
 namespace OTD.PresetBinds
 {
@@ -15,7 +16,7 @@ namespace OTD.PresetBinds
             var preset = AppInfo.PresetManager.FindPreset(name);
 
             if (preset != null)
-                await Remote.ApplySettingsAsync(preset.GetSettings());
+                await Remote.ApplySettingsAsync(preset.GetSettings(), name);
             else
                 Log.Write("OTD Presets", $"Error: The specified preset ({name}) couldn't be found", LogLevel.Error);
         }

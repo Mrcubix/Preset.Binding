@@ -1,3 +1,6 @@
 [submodule ".modules/OpenTabletDriver"]
 	path = .modules/OpenTabletDriver
 	url = https://github.com/OpenTabletDriver/OpenTabletDriver
+[submodule ".modules/OTD.UX.Remote"]
+	path = .modules/OTD.UX.Remote
+	url = https://github.com/Mrcubix/OTD.UX.Remote

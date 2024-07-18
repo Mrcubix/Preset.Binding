@@ -18,7 +18,10 @@ namespace OTD.PresetBinds.Binding
             };
 
             if (!Remote.Connected)
-                _ = Task.Run(() => Remote.Driver.Connect());
+            {
+                _ = Task.Run(() => Remote.Driver.ConnectAsync());
+                _ = Task.Run(() => Remote.UX.ConnectAsync());
+            }
         }
 
         public static string[] ValidModes => Commands.GetPresets().Select(x => x.Name).ToArray();

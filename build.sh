@@ -1,14 +1,28 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-dotnet publish -c Release -o temp
+files=( Preset.Binding OpenTabletDriver.External.Common OTD.UX.Remote.Lib)
+
+dotnet publish -c Debug -o temp
 
 # Move the Preset.Binding.dll to the build folder
 # check if the build folder does not exist, else create it
 if [ ! -d "build" ]; then
   mkdir build
+else
+  rm -rf build/*
 fi
 
-cp temp/Preset.Binding.dll build
+for file in "${files[@]}"; 
+do
+  cp temp/$file.dll build
+  cp temp/$file.pdb build
+done
+
+(
+  cd build
+  # zip the Preset.Binding.dll
+  jar -cfM Preset.Binding.zip ./Preset.Binding.dll
+)
 
 # Remove the temp folder
 rm -rf temp
