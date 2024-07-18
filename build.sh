@@ -18,10 +18,15 @@ do
   cp temp/$file.pdb build
 done
 
+# Re-create hashes.txt
+> "./build/hashes.txt"
+
 (
   cd build
   # zip the Preset.Binding.dll
   jar -cfM Preset.Binding.zip ./Preset.Binding.dll
+
+  sha256sum Preset.Binding.zip >> hashes.txt
 )
 
 # Remove the temp folder
