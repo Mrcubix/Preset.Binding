@@ -2,7 +2,7 @@
 
 files=( Preset.Binding OpenTabletDriver.External.Common OTD.UX.Remote.Lib)
 
-dotnet publish -c Debug -o temp
+dotnet publish -c Release -o temp
 
 # Move the Preset.Binding.dll to the build folder
 # check if the build folder does not exist, else create it
