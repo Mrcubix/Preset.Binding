@@ -39,4 +39,4 @@ jobs:
         # Add generated archives
         files+=("build/Preset.Binding.zip")
 
-        gh release create -d -t "Prset Binding $TAG" "$TAG" "${files[@]}" -F build/hashes.txt
+        gh release create -d -t "Preset Binding $TAG" "$TAG" "${files[@]}" -F build/hashes.txt
