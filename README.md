@@ -30,3 +30,5 @@ A plugin for OpenTabletDriver that allows you to bind keys to presets.
 
 The UX get out of sync when applying presets externally, it is only a visual issue, the preset is applied properly
 Looking into a fix for this.
+
+Update: The issue above can be solved by installing the optional plugin "[OTD UX Remote](https://github.com/Mrcubix/OTD.UX.Remote)" via the plugin manager
