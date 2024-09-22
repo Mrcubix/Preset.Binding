@@ -24,7 +24,7 @@ done
 (
   cd build
   # zip the Preset.Binding.dll
-  jar -cfM Preset.Binding.zip ./Preset.Binding.dll
+  jar -cfM Preset.Binding.zip ./*.dll
 
   sha256sum Preset.Binding.zip >> hashes.txt
 )
