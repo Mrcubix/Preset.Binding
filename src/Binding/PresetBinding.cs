@@ -4,6 +4,9 @@ using OpenTabletDriver.Plugin.Tablet;
 using OpenTabletDriver.Plugin.Attributes;
 using OTD.PresetBinds.IPC;
 using System.Linq;
+using System.Collections.Generic;
+using OpenTabletDriver.Desktop;
+using OpenTabletDriver.External.Common.RPC;
 
 namespace OTD.PresetBinds.Binding
 {
@@ -12,32 +15,33 @@ namespace OTD.PresetBinds.Binding
     {
         public PresetBinding()
         {
-            Remote.Driver.Connected += (s, e) => 
-            {
-                Remote.Connected = true;
-            };
+            Remote.UX.Disconnected += (s, e) => ConnectToUX(Remote.UX);
 
-            if (!Remote.Connected)
-            {
-                _ = Task.Run(() => Remote.Driver.ConnectAsync());
-                _ = Task.Run(() => Remote.UX.ConnectAsync());
-            }
+            ConnectToUX(Remote.Driver);
+            ConnectToUX(Remote.UX);
         }
 
-        public static string[] ValidModes => Commands.GetPresets().Select(x => x.Name).ToArray();
+        public readonly static IReadOnlyCollection<Preset> Presets = Commands.GetPresets();
+        public static string[] ValidModes => Presets.Select(x => x.Name).ToArray();
 
         [Property("Selected"), PropertyValidated(nameof(ValidModes))]
         public string? Selected { set; get; }
 
         public void Press(TabletReference tablet, IDeviceReport report)
         {
-            if (Selected != null && Remote.Connected)
+            if (Selected != null && Remote.Driver.IsConnected)
                 _ = Task.Run(() => Commands.ApplyPresetAsync(Selected));
         }
 
         public void Release(TabletReference tablet, IDeviceReport report)
         {
             return;
+        }
+
+        private static void ConnectToUX<T>(RpcClient<T> client) where T : class
+        {
+            if (client.IsConnected == false)
+                _ = Task.Run(() => client.ConnectAsync());
         }
     }
 }
