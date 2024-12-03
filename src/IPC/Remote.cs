@@ -10,6 +10,12 @@ namespace OTD.PresetBinds.IPC
 {
     public class Remote
     {
+        /*static Remote()
+        {
+            Driver.Disconnected += OnClientDisconnected<IDriverDaemon>;
+            UX.Disconnected += OnClientDisconnected<IUXRemote>;
+        }*/
+
         public static bool Connected { get; set; } = false;
 
         public static RpcClient<IDriverDaemon> Driver { get; } = new("OpenTabletDriver.Daemon");
@@ -23,7 +29,7 @@ namespace OTD.PresetBinds.IPC
 
                 Log.Debug("OTD Presets", $"Switched to '{name}' preset");
 
-                if (UX.IsConnected && UX.Instance != null)
+                if (UX.IsAttached && UX.Instance != null)
                 {
                     await UX.Instance.Synchronize();
                     await UX.Instance.SendNotification("Preset Binding", $"Switched to '{name}' preset");
@@ -36,5 +42,11 @@ namespace OTD.PresetBinds.IPC
                 Log.Write("OTD Presets", $"Error: {e}", LogLevel.Error);
             }
         }
+
+        /*private static void OnClientDisconnected<T>(object? sender, EventArgs e) where T : class
+        {
+            if (sender is RpcClient<T> client && client.IsConnected == false && client.IsConnecting == false)
+                _ = Task.Run(() => UX.ConnectAsync());
+        }*/
     }
 }

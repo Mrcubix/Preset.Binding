@@ -15,10 +15,8 @@ namespace OTD.PresetBinds.Binding
     {
         public PresetBinding()
         {
-            Remote.UX.Disconnected += (s, e) => ConnectToUX(Remote.UX);
-
-            ConnectToUX(Remote.Driver);
-            ConnectToUX(Remote.UX);
+            ConnectToRemote(Remote.Driver);
+            ConnectToRemote(Remote.UX);
         }
 
         public readonly static IReadOnlyCollection<Preset> Presets = Commands.GetPresets();
@@ -29,7 +27,7 @@ namespace OTD.PresetBinds.Binding
 
         public void Press(TabletReference tablet, IDeviceReport report)
         {
-            if (Selected != null && Remote.Driver.IsConnected)
+            if (Selected != null && Remote.Driver.IsAttached)
                 _ = Task.Run(() => Commands.ApplyPresetAsync(Selected));
         }
 
@@ -38,9 +36,9 @@ namespace OTD.PresetBinds.Binding
             return;
         }
 
-        private static void ConnectToUX<T>(RpcClient<T> client) where T : class
+        private static void ConnectToRemote<T>(RpcClient<T> client) where T : class
         {
-            if (client.IsConnected == false)
+            if (client.IsConnecting == false && client.IsConnected == false)
                 _ = Task.Run(() => client.ConnectAsync());
         }
     }
