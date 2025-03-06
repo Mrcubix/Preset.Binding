@@ -18,7 +18,7 @@ namespace OTD.PresetBinds
             if (preset != null)
                 await Remote.ApplySettingsAsync(preset.GetSettings(), name);
             else
-                Log.Write("OTD Presets", $"Error: The specified preset ({name}) couldn't be found", LogLevel.Error);
+                Log.Write("Preset Binding", $"Error: The specified preset ({name}) couldn't be found", LogLevel.Error);
         }
 
         public static IReadOnlyCollection<Preset> GetPresets()
