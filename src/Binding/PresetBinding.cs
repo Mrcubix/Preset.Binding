@@ -27,7 +27,7 @@ namespace OTD.PresetBinds.Binding
 
         public void Press(TabletReference tablet, IDeviceReport report)
         {
-            if (Selected != null && Remote.Driver.IsAttached && Remote.Driver.Instance != null)
+            if (Selected != null && Remote.IsReady && Remote.Driver.Instance != null)
                 _ = Task.Run(() => Commands.ApplyPresetAsync(Selected));
         }
 

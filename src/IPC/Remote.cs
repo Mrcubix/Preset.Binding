@@ -6,7 +6,6 @@ using OTD.UX.Remote.Lib;
 using StreamJsonRpc;
 using System;
 using System.Diagnostics;
-using System.Reflection;
 using System.Threading.Tasks;
 
 namespace OTD.PresetBinds.IPC
@@ -19,7 +18,7 @@ namespace OTD.PresetBinds.IPC
             UX.Disconnected += OnClientDisconnected<IUXRemote>;
         }*/
 
-        public static bool Connected { get; set; } = false;
+        public static bool IsReady => Driver.IsAttached;
 
         public static RpcClient<IDriverDaemon> Driver { get; } = new("OpenTabletDriver.Daemon");
         public static RpcClient<IUXRemote> UX { get; } = new("OTD.UX.Remote");
@@ -30,10 +29,10 @@ namespace OTD.PresetBinds.IPC
             {
                 await Driver.Instance.SetSettings(settings);
 
-                Log.Debug("Preset Binding", $"Switched to '{name}' preset");
-
                 if (UX.IsAttached && UX.Instance != null)
                 {
+                    Log.Debug("Preset Binding", $"Switched to '{name}' preset");
+
                     await UX.Instance.Synchronize();
                     await UX.Instance.SendNotification("Preset Binding", $"Switched to '{name}' preset");
                 }
