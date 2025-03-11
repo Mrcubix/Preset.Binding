@@ -28,28 +28,41 @@ namespace OTD.PresetBinds.IPC
             try
             {
                 await Driver.Instance.SetSettings(settings);
-
-                if (UX.IsAttached && UX.Instance != null)
-                {
-                    Log.Debug("Preset Binding", $"Switched to '{name}' preset");
-
-                    await UX.Instance.Synchronize();
-                    await UX.Instance.SendNotification("Preset Binding", $"Switched to '{name}' preset");
-                }
-                else
-                    Log.Write("Preset Binding", $"Switched to '{name}' preset", LogLevel.Info, false, true);
             }
             catch (Exception e)
             {
-                HandleException(e);
+                HandleException(e, "Applying Settings");
+            }
+
+
+            if (UX.IsAttached && UX.Instance != null)
+                await HandleUXAsync(name);
+            else
+                Log.Write("Preset Binding", $"Switched to '{name}' preset", LogLevel.Info, false, true);
+
+        }
+
+        private static async Task HandleUXAsync(string name)
+        {
+            Log.Debug("Preset Binding", $"Switched to '{name}' preset");
+
+            try
+            {
+                await UX.Instance.Synchronize();
+                await UX.Instance.SendNotification("Preset Binding", $"Switched to '{name}' preset");
+            }
+            catch (Exception e)
+            {
+                HandleException(e, "Synchronizing Settings in the UX");
             }
         }
 
-        private static void HandleException(Exception e)
+        private static void HandleException(Exception e, string lastAction = "")
         {
             if ((e is ConnectionLostException) || (e is InvalidOperationException && e.Message.Contains("listening")))
                 return;
 
+            Log.Write("Preset Binding", $"An Error occured while {lastAction}", LogLevel.Error);
             Log.Write("Preset Binding", $"Error: {e}", LogLevel.Error);
         }
 

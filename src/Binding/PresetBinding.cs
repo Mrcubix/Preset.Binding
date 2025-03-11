@@ -7,6 +7,7 @@ using System.Linq;
 using System.Collections.Generic;
 using OpenTabletDriver.Desktop;
 using OpenTabletDriver.External.Common.RPC;
+using OTD.PresetBinds.Extensions;
 
 namespace OTD.PresetBinds.Binding
 {
@@ -38,8 +39,8 @@ namespace OTD.PresetBinds.Binding
 
         private static void ConnectToRemote<T>(RpcClient<T> client) where T : class
         {
-            if (client.IsConnecting == false && client.IsConnected == false)
-                _ = Task.Run(() => client.ConnectAsync());
+            if (client.IsConnecting == false && client.IsConnected == false && client.IsAttached == false)
+                client.TryConnect();
         }
     }
 }
