@@ -25,6 +25,8 @@ namespace OTD.PresetBinds.IPC
 
         public static async Task ApplySettingsAsync(Settings settings, string name)
         {
+            bool isSuccess = true;
+
             try
             {
                 await Driver.Instance.SetSettings(settings);
@@ -32,10 +34,10 @@ namespace OTD.PresetBinds.IPC
             catch (Exception e)
             {
                 HandleException(e, "Applying Settings");
+                isSuccess = false;
             }
 
-
-            if (UX.IsAttached && UX.Instance != null)
+            if (isSuccess && UX.IsAttached && UX.Instance != null)
                 await HandleUXAsync(name);
             else
                 Log.Write("Preset Binding", $"Switched to '{name}' preset", LogLevel.Info, false, true);

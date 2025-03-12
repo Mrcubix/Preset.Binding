@@ -14,6 +14,8 @@ namespace OTD.PresetBinds.Binding
     [PluginName("Preset")]
     public class PresetBinding: IStateBinding
     {
+        static PresetBinding() => Commands.Timer.Start();
+
         public PresetBinding()
         {
             ConnectToRemote(Remote.Driver);
@@ -29,7 +31,7 @@ namespace OTD.PresetBinds.Binding
         public void Press(TabletReference tablet, IDeviceReport report)
         {
             if (Selected != null && Remote.IsReady && Remote.Driver.Instance != null)
-                _ = Task.Run(() => Commands.ApplyPresetAsync(Selected));
+                Commands.ApplyPreset(Selected);
         }
 
         public void Release(TabletReference tablet, IDeviceReport report)

@@ -4,17 +4,17 @@ using OpenTabletDriver.Plugin;
 using OpenTabletDriver.Desktop;
 using OTD.PresetBinds.IPC;
 using System.Diagnostics;
+using System;
 
 namespace OTD.PresetBinds
 {
     public class Commands
     {
-        static Commands() => Timer.Start();
+        public const int Timeout = 200;
 
-        public const int Timeout = 300;
         public static Stopwatch Timer { get; } = new Stopwatch();
 
-        public static async Task ApplyPresetAsync(string name)
+        public static void ApplyPreset(string name)
         {
             if (Timer.ElapsedMilliseconds > Timeout)
             {
@@ -23,12 +23,25 @@ namespace OTD.PresetBinds
                 var preset = AppInfo.PresetManager.FindPreset(name);
 
                 if (preset != null)
-                    await Remote.ApplySettingsAsync(preset.GetSettings(), name);
+                    _ = TryApplyPresetAsync(preset);
                 else
                     Log.Write("Preset Binding", $"Error: The specified preset ({name}) couldn't be found", LogLevel.Error);
             }
 
             Timer.Restart();
+        }
+
+        public static async Task TryApplyPresetAsync(Preset preset)
+        {
+            try
+            {
+                await Remote.ApplySettingsAsync(preset.GetSettings(), preset.Name);
+            }
+            catch (Exception e)
+            {
+                Log.Write("Preset Binding", $"An Error occured while applying the preset", LogLevel.Error);
+                Log.Write("Preset Binding", $"Error: {e}", LogLevel.Error);
+            }
         }
 
         public static IReadOnlyCollection<Preset> GetPresets()
