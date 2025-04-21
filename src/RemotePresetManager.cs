@@ -10,7 +10,7 @@ using OTD.PresetBinds.Extensions;
 using OTD.UX.Remote.Lib;
 using StreamJsonRpc;
 
-namespace OTD.PresetBinds.Binding
+namespace OTD.PresetBinds
 {
     public class RemotePresetManager
     {
