@@ -9,9 +9,15 @@ namespace OTD.PresetBinds.Extensions
     {
         public static void TryConnect<T>(this RpcClient<T> client) where T : class
         {
+            _ = client.TryConnectAsync();
+        }
+
+        public static async Task TryConnectAsync<T>(this RpcClient<T> client) where T : class
+        {
             try
             {
-                _ = Task.Run(() => client.ConnectAsync());
+                if (client.IsConnecting == false && client.IsConnected == false && client.IsAttached == false)
+                    await client.ConnectAsync();
             }
             catch (Exception e)
             {
