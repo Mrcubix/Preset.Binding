@@ -17,7 +17,6 @@ namespace OTD.PresetBinds
         #region Constants
 
         private const string PLUGIN_GROUP = "Preset Binding";
-        private const int ConnectionTimeout = 2000;
         private const int Timeout = 200;
 
         private static Stopwatch Timer { get; } = new Stopwatch();
@@ -57,7 +56,7 @@ namespace OTD.PresetBinds
         private static async Task TryApplyPreset(Preset preset)
         {
             // The driver might not be connected yet
-            if (EnsureConnection(Driver) == false)
+            if (Driver.EnsureConnection() == false)
             {
                 Log.Write(PLUGIN_GROUP, "An attempt to Apply a Preset failed: Driver is not connected", LogLevel.Error);
                 return;
@@ -84,7 +83,7 @@ namespace OTD.PresetBinds
         private static async Task TrySynchronizingUX()
         {
             // UX.Remote might not be installed or ready
-            if (await EnsureConnectionAsync(UX) == false)
+            if (await UX.EnsureConnectionAsync() == false)
                 return;
 
             try
@@ -105,19 +104,6 @@ namespace OTD.PresetBinds
         {
             PresetManager.Refresh();
             return PresetManager.GetPresets();
-        }
-
-        private static bool EnsureConnection<T>(RpcClient<T> client) where T : class
-        {
-            return EnsureConnectionAsync(Driver).GetAwaiter().GetResult();
-        }
-
-        private static async Task<bool> EnsureConnectionAsync<T>(RpcClient<T> client) where T : class
-        {
-            var timeout = Task.Delay(ConnectionTimeout);
-            var result = await Task.WhenAny(client.TryConnectAsync(), timeout);
-
-            return result != timeout && client.IsAttached;
         }
 
         private static void HandleException(Exception e, string lastAction = "")

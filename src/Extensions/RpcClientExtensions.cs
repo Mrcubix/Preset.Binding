@@ -25,5 +25,17 @@ namespace OTD.PresetBinds.Extensions
                 Log.Write("Preset Binding", $"Error: {e}", LogLevel.Error);
             }
         }
+        public static bool EnsureConnection<T>(this RpcClient<T> client) where T : class
+        {
+            return EnsureConnectionAsync(client).GetAwaiter().GetResult();
+        }
+
+        public static async Task<bool> EnsureConnectionAsync<T>(this RpcClient<T> client, int connectionTimeout = 2000) where T : class
+        {
+            var timeout = Task.Delay(connectionTimeout);
+            var result = await Task.WhenAny(client.TryConnectAsync(), timeout);
+
+            return result != timeout && client.IsAttached;
+        }
     }
 }
