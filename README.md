@@ -2,6 +2,11 @@
 
 A plugin for OpenTabletDriver that allows you to bind keys to presets.
 
+## Archival notice
+
+The Preset Binding functionality has been integrated into OpenTabletDriver 0.6.6.0.
+(See https://github.com/OpenTabletDriver/OpenTabletDriver/pull/3995 for more info about my PR)
+
 ### How to use
 
 1. Install the plugin
